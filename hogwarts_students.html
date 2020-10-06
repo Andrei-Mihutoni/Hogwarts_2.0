@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hogwarts students list</title>
+  <link rel="stylesheet" href="hogwarts_students.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <header>
+    <section id="headerTextBox">
+      <h1>Hogwarts</h1>
+      <h2>Students list</h2>
+    </section>
+    <section id="headerCountBox">
+      <h2>Count</h2>
+      <hr />
+      <div class="studentCountList">
+        <ul>
+          <h3>Students</h3>
+          <li class="allStudentsCount">
+            <p>All</p>
+            <p id="countAll">zzz</p>
+          </li>
+          <li class="enroledStudentsCount">
+            <p>Enroled</p>
+            <p id="countEnroled">zzz</p>
+          </li>
+          <li class="ExpelledStudentsCount">
+            <p>Expelled</p>
+            <p id="countExpelled">zz</p>
+          </li>
+        </ul>
+        <ul>
+          <h3>Houses</h3>
+          <li class="slytherinHouseCount">
+            <p>Slytherin</p>
+            <p id="slytherynCount">vvv</p>
+          </li>
+          <li class="gryffindorHouseCount">
+            <p>Gryffindor</p>
+            <p id="gryffindorCount">vvv</p>
+          </li>
+          <li class="ravenclawHouseCount">
+            <p>Ravenclaw</p>
+            <p id="ravenclawCount">vvv</p>
+          </li>
+          <li class="hufflepuffHouseCount">
+            <p>Hufflepuff</p>
+            <p id="hufflepuffCount">vvv</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <div id="filterContainer">
+      Filter:
+      <select class="houseDropdown" name="houseDropdown" id="houseDropdown">
+        <option disabled selected value>by House</option>
+        <!-- <optgroup label="House"> -->
+        <option value="slytherin">Slytherin</option>
+        <option value="gryffindor">Gryffindor</option>
+        <option value="ravenclaw">Ravenclaw</option>
+        <option value="hufflepuff">Hufflepuff</option>
+        </optgroup>
+      </select>
+      <select class="houseDropdown" name="houseDropdown" id="houseDropdownStatus">
+        <option disabled selected value>by status</option>
+        <!-- <optgroup label="Status"> -->
+        <option value="enrolled">Enrolled</option>
+        <option value="expelled">Expelled</option>
+        </optgroup>
+      </select>
+
+
+
+      <button class="filter" data-action="filter" data-filter="all">All students</button>
+    </div>
+
+    <!-- <div class="searchWrapper">
+        <p class="searchText">Search item by keyword:</p>
+        <input oninput="searchByKeyword(this.value)" type="search" class="search searchByKeyword" placeholder="Keyword" onfocus="this.placeholder=''" onblur="this.placeholder='Keyword'" />
+        <button class="reset_all greenbutton" onClick="window.location.reload();">
+            &#10226;
+        </button>
+    </div> -->
+
+    <hr />
+
+    <table id="list">
+      <thead>
+        <tr id="sorting">
+          <th data-action="sort" data-sort-direction="asc" data-sort="firstName">First Name</th>
+          <th data-action="sort" data-sort-direction="asc" data-sort="lastName">Last Name</th>
+          <th data-action="sort" data-sort-direction="asc" data-sort="middleName">Middle Name</th>
+          <th data-action="sort" data-sort-direction="asc" data-sort="gender">Gender</th>
+          <th data-action="sort" data-sort-direction="asc" data-sort="house">House</th>
+          <th data-action="sort" data-sort-direction="asc" data-sort="prefect">Prefect</th>
+          <!-- <th data-action="sort" data-sort-direction="asc" data-sort="star">⬤</th> -->
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- template goes here -->
+      </tbody>
+    </table>
+
+    <template id="student">
+      <tr id="studentRow">
+        <td data-field="firstName">First Name</td>
+        <td data-field="lastName">Last Name</td>
+        <td data-field="middleName">Middle Name</td>
+        <td data-field="gender">Gender</td>
+        <td data-field="house">House</td>
+        <td data-field="prefect">⬤</td>
+        <td><button id="expellBtn">Expel</button></td>
+      </tr>
+    </template>
+
+    <!-- <button id="myBtn">Open Modal</button> -->
+
+    <!-- The Modal -->
+    <div id="studentModal" class="modal hide">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <div id="modalTextBox">
+          <h3>Student Full Name:</h3>
+          <p data-field="fullName"></p>
+          <h3>House:</h3>
+          <p data-field="modalHouse"></p>
+
+        </div>
+        <img id="modalStudentImage">
+        <div class="modalButtons">
+          <button id="expellBtn">Expel</button>
+          <button id="makePrefectBtn">Promote as prefect</button>
+          <button id="makeInquisitorBtn">Make Inquisitor</button>
+        </div>
+        <span id="close" class="close">&times;</span>
+      </div>
+
+    </div>
+    </div>
+  </main>
+</body>
+
+<script src="hogwarts_students.js"></script>
+
+</html>

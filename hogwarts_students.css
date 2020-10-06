@@ -1,0 +1,246 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+header {
+  margin: 4vh 4vw 4vh 4vw;
+  display: grid;
+  grid-template-columns: 1fr 30%;
+}
+
+body {
+  font-family: "Roboto";
+  color: #cecece;
+  /* background-color: #2c313d; */
+  background-color: #303a53;
+}
+
+#headerTextBox h1 {
+  font-size: 4em;
+  font-weight: 300;
+}
+
+#headerCountBox h2 {
+  font-size: 2em;
+  font-weight: 300;
+}
+
+h3 {
+  /* font-size: 1.5em; */
+  font-weight: 300;
+}
+
+p {
+  font-size: 1em;
+  font-weight: 200;
+}
+ul {
+  list-style: none;
+}
+
+#headerCountBox {
+  /* border: solid 2 px hotpink; */
+  /* border: 5px solid red; */
+  padding: 5px;
+}
+
+.studentCountList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 5em;
+  margin-top: 20px;
+}
+
+.studentCountList li {
+  display: grid;
+  grid-template-columns: 90% 10%;
+  padding: 0.1em;
+}
+
+#filterContainer {
+  margin-top: 10vh;
+  margin-left: 10vw;
+}
+
+#sorting th.sortby {
+  text-decoration: underline;
+}
+
+#sorting th.sortby[data-sort-direction="asc"]::after {
+  content: "⇓";
+}
+
+#sorting th.sortby[data-sort-direction="desc"]::after {
+  content: "⇑";
+}
+
+#list {
+  border-collapse: collapse;
+}
+
+table {
+  width: 80%;
+  text-align: left;
+  margin: 5vh auto;
+  /* display: table; */
+  padding: 0 0 8em 0;
+}
+
+th {
+  height: 2em;
+  padding: 1em;
+  text-align: center;
+  /* background-color: #2c313d; */
+  border-right: 1px dotted rgb(0, 0, 0);
+  color: #d1d1d1;
+  letter-spacing: 0.1em;
+}
+
+td {
+  border-right: rgb(0, 0, 0) 1px dotted;
+}
+
+#list tbody tr td {
+  padding: 5px;
+  border-bottom: 1px solid rgb(0, 0, 0);
+  /* text-align: left; */
+}
+
+#list tbody tr:nth-child(odd) {
+  background-color: #2c3446;
+}
+
+/* #list tbody tr:hover {
+    background-color: #ff0095;
+  } */
+#list tbody tr:nth-child(even) {
+  border-right: rgb(0, 0, 0) 1px dotted;
+  background-color: #323c50;
+}
+
+#list tbody tr:hover {
+  background-color: #41444d;
+}
+
+hr {
+  /* margin-inline-start: 10vw;
+  margin-inline-end: 10vw; */
+  color: #2c3446;
+  border-width: 0.5px;
+}
+
+#studentRow {
+  cursor: pointer;
+}
+
+/* ****** STAR ****** */
+
+[data-field="star"] {
+  text-align: center;
+  cursor: pointer;
+  filter: grayscale(50%);
+}
+
+[data-action] {
+  cursor: pointer;
+}
+
+[data-field="gender"] {
+  text-align: center;
+}
+
+[data-field="prefect"] {
+  text-align: center;
+}
+
+/*  ####    MODAL      */
+/* The Modal background */
+.modal {
+  display: block; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  display: grid;
+  grid-template-columns: 60% 50px 25%;
+  grid-template-rows: 80px auto 80px;
+  gap: 15px 10px;
+  background-color: #d1d1d1;
+  margin: auto;
+  padding: 20px 20px 20px 20px;
+  border: 1px solid #888;
+  width: 60vw;
+  height: 35vh;
+  justify-content: space-between;
+}
+
+#modalTextBox {
+  color: black;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 3;
+}
+
+#modalTextBox h3 {
+  font-size: 1.3em;
+  font-weight: 600;
+  padding-top: 20px;
+  padding-bottom: 5px;
+}
+#modalTextBox p {
+  font-weight: 500;
+}
+
+#modalStudentImage {
+  grid-column-start: 3;
+  grid-column-end: 4;
+  grid-row-start: 1;
+  grid-row-end: 3;
+  justify-self: end;
+  width: 100%;
+  max-width: 150px;
+  height: auto;
+}
+
+.modalButtons {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 3;
+  grid-row-end: 4;
+  /* justify-self: end; */
+  padding-top: 25px;
+  padding-left: ;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.hide {
+  display: none;
+}
