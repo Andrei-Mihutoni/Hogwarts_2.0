@@ -28,7 +28,7 @@ const Student = {
 
 function start() {
   loadJSON();
-  addSortEvent();
+  // addSortEvent(); //to fix
   addFilterEvents();
   addModalCloseEventListener();
 
@@ -39,6 +39,8 @@ function loadJSON() {
     .then((response) => response.json())
     .then((jsonData) => {
       prepareObjects(jsonData);
+      addSortEvent();   // ####### to fix 
+
     });
 }
 
@@ -129,6 +131,7 @@ function displayStudent(student) {
 
 function addSortEvent() {
   const sortBtns = document.querySelectorAll("[data-action=sort]");
+  currentStudentsList = allStudents;
   for (let i = 0; i < sortBtns.length; i++) {
     sortBtns[i].addEventListener("click", function () {
       sortStudents(this.dataset.sort, currentStudentsList, this.dataset.sortDirection);
@@ -171,7 +174,7 @@ function sortStudents(value, allStudentsParam, sortDirection) {
 
   displayList(currentStudentsList);
 
-
+  console.log(allStudentsParam)
   //  revers asc/desc var 1
   // let reverse = 1;
   // if (sortDirection == "asc") {
@@ -193,6 +196,16 @@ function sortStudents(value, allStudentsParam, sortDirection) {
 
 function addFilterEvents() {
   document.querySelector("#houseDropdown").addEventListener("input", filterStudents);
+  document.querySelector("[data-filter=all]").addEventListener("click", function () {
+    currentStudentsList = allStudents;
+    displayList(currentStudentsList);
+  });
+  document.querySelector("#houseDropdownStatus").addEventListener("input", function () {
+    if (this.value === "enrolled") {
+      displayList(currentStudentsList);
+    }
+    else displayList(expelledStudents);
+  });
 }
 
 function filterStudents(event) {
@@ -226,7 +239,8 @@ function showModal(student) {
   document.querySelector("[data-field=fullName]").textContent = student.firstName + " " + student.middleName + " " + student.lastName;
   document.querySelector("[data-field=modalHouse]").textContent = student.house;
   document.getElementById("modalStudentImage").src = "/images/" + student.imageFileName;
-  console.log(student.imageFileName)
+  console.log(student.imageFileName);
+  addEventListenerModalButtons(student);
 }
 
 
@@ -236,18 +250,56 @@ function addModalCloseEventListener() {
   const closeModal = document.getElementById("close");
 
   window.addEventListener("click", function (event) {
-    if (event.target == modal)
+    if (event.target == modal) {
       modal.classList.add("hide");
+      removeBtnEvents(modal);
+    }
   })
 
   closeModal.addEventListener("click", function () {
     modal.classList.add("hide");
+    removeBtnEvents(modal);
+
   })
 
 }
 
+function closeModal() {
+  document.getElementById("studentModal").classList.add("hide");
+  removeBtnEvents(document.getElementById("studentModal"));
+}
 
-function addEventListenerModalButtons() {
-  document.querySelector("#expellBtn")
 
+function addEventListenerModalButtons(student) {
+  document.querySelector("#expellBtn").addEventListener("click", function () {
+    expelStudent(student);
+  })
+
+}
+
+function expelStudent(student) {
+  allStudents.splice(allStudents.indexOf(student), 1);
+  expelledStudents.push(student);
+
+  currentStudentsList.splice(currentStudentsList.indexOf(student), 1);
+
+  closeModal();
+  displayList(currentStudentsList);
+}
+
+
+function removeBtnEvents(modal) {
+  const modalContent = modal.querySelector(".modalButtons");
+
+  const expellBtn = modalContent.querySelector("#expellBtn"),
+    expellBtnClone = expellBtn.cloneNode(true);
+  expellBtn.parentNode.replaceChild(expellBtnClone, expellBtn);
+
+  const makePrefectBtn = modalContent.querySelector("#makePrefectBtn"),
+    prefectBtnClone = makePrefectBtn.cloneNode(true);
+  makePrefectBtn.parentNode.replaceChild(prefectBtnClone, makePrefectBtn);
+
+  const makeInquisitorBtn = modalContent.querySelector("#makeInquisitorBtn"),
+    makeInquisitorClone = makeInquisitorBtn.cloneNode(true);
+  makeInquisitorBtn.parentNode.replaceChild(makeInquisitorClone, makeInquisitorBtn);
 }
