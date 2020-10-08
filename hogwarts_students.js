@@ -30,6 +30,28 @@ const Families = {
 const families = Object.create(Families);
 
 
+let prefectHouses = [
+  {
+    name: "Gryffindor",
+    students: []
+  },
+
+  {
+    name: "Slytherin",
+    students: []
+  },
+
+  {
+    name: "Hufflepuff",
+    students: []
+  },
+
+  {
+    name: "Ravenclaw",
+    students: []
+  }
+];
+
 
 function start() {
   loadJSONBloodStatus();
@@ -88,13 +110,14 @@ function createStudentObject(jsonStudent) {
   student.nickName = nickName(student.fullName);
   student.imageFileName = student.lastName.toLowerCase() + "_" + student.firstName.charAt(0).toLowerCase() + ".png";
   student.inquisitorialSquad = false;
+  student.prefect = false;
 
 
 
 
   for (let i = 0; i < families.half.length; i++) {
     if (families.half[i] == student.lastName) {
-      student.bloodStatus = "Half Blood";
+      student.bloodStatus = "Half";
     } else if (families.half[i] !== student.lastName) {
       student.bloodStatus = "Muggle";
     }
@@ -102,7 +125,7 @@ function createStudentObject(jsonStudent) {
 
   for (let i = 0; i < families.pure.length; i++) {
     if (families.pure[i] == student.lastName) {
-      student.bloodStatus = "Pure Blood";
+      student.bloodStatus = "Pure";
     }
   };
 
@@ -154,8 +177,14 @@ function displayStudent(student) {
   clone.querySelector("[data-field=middleName]").textContent = student.middleName;
   clone.querySelector("[data-field=gender]").textContent = student.gender;
   clone.querySelector("[data-field=house]").textContent = student.house;
+  clone.querySelector("[data-field=blood]").textContent = student.bloodStatus;
+
   if (student.inquisitorialSquad == true) {
     clone.querySelector("[data-field=inquisitor]").textContent = "✓";
+  }
+
+  if (student.prefect == true) {
+    clone.querySelector("[data-field=prefect]").textContent = "✓";
   }
   addModalListner(student, clone);
 
@@ -283,7 +312,13 @@ function showModal(student) {
   document.getElementById("modalStudentImage").src = "/images/" + student.imageFileName;
   console.log(student.imageFileName);
   addEventListenerModalButtons(student);
-}
+
+  if (student.prefect == true) {
+    document.querySelector("#makePrefectBtn").textContent = "Remove Prefect";
+  } else {
+    document.querySelector("#makePrefectBtn").textContent = "Add as Prefect";
+  }
+};
 
 
 
@@ -315,11 +350,23 @@ function closeModal() {
 function addEventListenerModalButtons(student) {
   document.querySelector("#expellBtn").addEventListener("click", function () {
     expelStudent(student);
-  })
+    displayList(currentStudentsList);
+  });
   document.querySelector("#makeInquisitorBtn").addEventListener("click", function () {
     makeInquisitor(student);
-    displayList(currentStudentsList)
-  })
+    displayList(currentStudentsList);
+  });
+  document.querySelector("#makePrefectBtn").addEventListener("click", function () {
+    makePrefect(student);
+    displayList(currentStudentsList);
+
+    if (student.prefect == true) {
+      this.textContent = "Remove Prefect";
+    } else {
+      this.textContent = "Add as Prefect";
+    }
+  });
+
 
 }
 
@@ -328,15 +375,43 @@ function expelStudent(student) {
   expelledStudents.push(student);
   currentStudentsList.splice(currentStudentsList.indexOf(student), 1);
   closeModal();
-  displayList(currentStudentsList);
 }
 
 
 function makeInquisitor(student) {
-  if (student.bloodStatus == "Pure Blood" || student.house == "Slytherin") {
+  if (student.bloodStatus == "Pure" || student.house == "Slytherin") {
     student.inquisitorialSquad = true;
   }
-}
+};
+
+function makePrefect(student) {
+
+  for (let i = 0; i < prefectHouses.length; i++) {
+    if (student.house == prefectHouses[i].name) {
+      if (prefectHouses[i].students.length < 2) {
+        if (student.prefect == false) {
+          prefectHouses[i].students.push(student);
+          student.prefect = true;
+          console.log(prefectHouses[i].students);
+
+        } else {
+          prefectHouses[i].students.splice(prefectHouses[i].students.indexOf(student), 1);
+          student.prefect = false
+          console.log(prefectHouses[i].students);
+
+        }
+      }
+      else {
+        alert(` There can be maximum 2 prefects from each house.
+                 Remove one before adding another one`);
+      }
+    }
+  }
+};
+
+
+
+
 
 function removeBtnEvents(modal) {
   const modalContent = modal.querySelector(".modalButtons");
@@ -353,3 +428,6 @@ function removeBtnEvents(modal) {
     makeInquisitorClone = makeInquisitorBtn.cloneNode(true);
   makeInquisitorBtn.parentNode.replaceChild(makeInquisitorClone, makeInquisitorBtn);
 }
+
+
+
