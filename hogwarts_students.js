@@ -22,27 +22,42 @@ const Student = {
   imageFileName: "",
 };
 
+const Families = {
+  half: "",
+  pure: "",
+};
 
+const families = Object.create(Families);
 
 
 
 function start() {
-  loadJSON();
-  // addSortEvent(); //to fix
+  loadJSONBloodStatus();
+  loadJSONStudents();
+  // addSortEvent(); //to fix - executes before loading the JSON
   addFilterEvents();
   addModalCloseEventListener();
 
-}
+};
 
-function loadJSON() {
-  fetch("https://petlatkea.dk/2020/hogwarts/students.json")
+async function loadJSONStudents() {
+  await fetch("https://petlatkea.dk/2020/hogwarts/students.json")
     .then((response) => response.json())
     .then((jsonData) => {
       prepareObjects(jsonData);
-      addSortEvent();   // ####### to fix 
+      addSortEvent();   // ####### to fix - executes after loading the JSON
 
     });
 }
+
+async function loadJSONBloodStatus() {
+  await fetch("https://petlatkea.dk/2020/hogwarts/families.json")
+    .then((response) => response.json())
+    .then((jsonData) => {
+      prepareObjectsBloodStatus(jsonData);
+    });
+}
+
 
 function prepareObjects(jsonData) {
   // creating a new array, populated with return value of the createStudentObject function
@@ -51,9 +66,15 @@ function prepareObjects(jsonData) {
   //   console.log(allStudents);
   // console.table(allStudents) 
   displayList(allStudents);
-
-
 }
+
+
+function prepareObjectsBloodStatus(jsonData) {
+  families.pure = jsonData.pure;
+  families.half = jsonData.half;
+};
+
+
 
 function createStudentObject(jsonStudent) {
   //   console.log(jsonStudent);
@@ -66,8 +87,24 @@ function createStudentObject(jsonStudent) {
   student.middleName = capitalize(middleName(student.fullName));
   student.nickName = nickName(student.fullName);
   student.imageFileName = student.lastName.toLowerCase() + "_" + student.firstName.charAt(0).toLowerCase() + ".png";
+  student.inquisitorialSquad = false;
 
 
+
+
+  for (let i = 0; i < families.half.length; i++) {
+    if (families.half[i] == student.lastName) {
+      student.bloodStatus = "Half Blood";
+    } else if (families.half[i] !== student.lastName) {
+      student.bloodStatus = "Muggle";
+    }
+  };
+
+  for (let i = 0; i < families.pure.length; i++) {
+    if (families.pure[i] == student.lastName) {
+      student.bloodStatus = "Pure Blood";
+    }
+  };
 
   // console.log(student, jsonStudent);
   //   console.log(student);
@@ -117,6 +154,9 @@ function displayStudent(student) {
   clone.querySelector("[data-field=middleName]").textContent = student.middleName;
   clone.querySelector("[data-field=gender]").textContent = student.gender;
   clone.querySelector("[data-field=house]").textContent = student.house;
+  if (student.inquisitorialSquad == true) {
+    clone.querySelector("[data-field=inquisitor]").textContent = "✓";
+  }
   addModalListner(student, clone);
 
   // console.log(clone);
@@ -238,6 +278,8 @@ function showModal(student) {
   document.querySelector("#studentModal").classList.remove("hide");
   document.querySelector("[data-field=fullName]").textContent = student.firstName + " " + student.middleName + " " + student.lastName;
   document.querySelector("[data-field=modalHouse]").textContent = student.house;
+  document.querySelector("[data-field=modalBloodStatus]").textContent = student.bloodStatus;
+
   document.getElementById("modalStudentImage").src = "/images/" + student.imageFileName;
   console.log(student.imageFileName);
   addEventListenerModalButtons(student);
@@ -274,19 +316,27 @@ function addEventListenerModalButtons(student) {
   document.querySelector("#expellBtn").addEventListener("click", function () {
     expelStudent(student);
   })
+  document.querySelector("#makeInquisitorBtn").addEventListener("click", function () {
+    makeInquisitor(student);
+    displayList(currentStudentsList)
+  })
 
 }
 
 function expelStudent(student) {
   allStudents.splice(allStudents.indexOf(student), 1);
   expelledStudents.push(student);
-
   currentStudentsList.splice(currentStudentsList.indexOf(student), 1);
-
   closeModal();
   displayList(currentStudentsList);
 }
 
+
+function makeInquisitor(student) {
+  if (student.bloodStatus == "Pure Blood" || student.house == "Slytherin") {
+    student.inquisitorialSquad = true;
+  }
+}
 
 function removeBtnEvents(modal) {
   const modalContent = modal.querySelector(".modalButtons");
