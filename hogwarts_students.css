@@ -175,15 +175,15 @@ hr {
 /* Modal Content */
 .modal-content {
   display: grid;
-  grid-template-columns: 60% 50px 25%;
-  grid-template-rows: 80px auto 80px;
+  grid-template-columns: 60% 30% 20px;
+  grid-template-rows: 80px auto 150px;
   gap: 15px 10px;
   background-color: #d1d1d1;
   margin: auto;
   padding: 20px 20px 20px 20px;
   border: 1px solid #888;
   width: 60vw;
-  height: 40vh;
+  height: 50vh;
   justify-content: space-between;
 }
 
@@ -206,14 +206,27 @@ hr {
 }
 
 #modalStudentImage {
-  grid-column-start: 3;
-  grid-column-end: 4;
+  grid-column-start: 2;
+  grid-column-end: 3;
   grid-row-start: 1;
   grid-row-end: 3;
   justify-self: end;
   width: 100%;
   max-width: 150px;
   height: auto;
+  /* align-self: center; */
+  justify-self: center;
+}
+
+#modalHouseLogo {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 4;
+  width: 100%;
+  max-width: 100px;
+  height: auto;
+  justify-self: center;
 }
 
 .modalButtons {
@@ -221,10 +234,17 @@ hr {
   grid-column-end: 2;
   grid-row-start: 3;
   grid-row-end: 4;
-  /* justify-self: end; */
   padding-top: 25px;
-  padding-left: ;
+  align-self: center;
 }
+.modalButtons button {
+  padding: 8px 6px 8px 6px;
+  margin-left: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08rem;
+}
+
+#expellBtn #makePrefectBtn #makeInquisitorBtn
 
 /* The Close Button */
 .close {
@@ -232,6 +252,11 @@ hr {
   float: right;
   font-size: 28px;
   font-weight: bold;
+  grid-column-start: 3;
+  grid-column-end: 4;
+  grid-row-start: 1;
+  grid-row-end: 3;
+  justify-self: end;
 }
 
 .close:hover,
@@ -243,4 +268,20 @@ hr {
 
 .hide {
   display: none;
+}
+
+.slytherin {
+  background-color: #638578;
+}
+
+.hufflepuff {
+  background-color: #fbedbe;
+}
+
+.ravenclaw {
+  background-color: #96b5d4;
+}
+
+.gryffindor {
+  background-color: #9d4761;
 }

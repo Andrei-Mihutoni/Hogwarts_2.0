@@ -8,7 +8,7 @@ let expelledStudents = [];
 let currentStudentsList = [];
 let hackedSystem = false;
 
-const Student = {
+const Student = {  //setting the Student prototype
   fullName: "",
   firstName: "",
   middleName: "",
@@ -23,15 +23,15 @@ const Student = {
   imageFileName: "",
 };
 
-const Families = {
+const Families = {  // settig the Families prototype
   half: "",
   pure: "",
 };
 
-const families = Object.create(Families);
+const families = Object.create(Families);  //creating the Families object
 
 
-let prefectHouses = [
+let prefectHouses = [      // setting the prefectHouses array. I am going to use it to keep track on the number of prefects in each house
   {
     name: "Gryffindor",
     students: []
@@ -56,7 +56,6 @@ let prefectHouses = [
 
 function start() {
   loadJSONBloodStatus();
-  // addSortEvent(); //to fix - executes before loading the JSON
   addFilterEvents();
   addModalCloseEventListener();
   countStatus();
@@ -81,12 +80,8 @@ async function loadJSONBloodStatus() {
   loadJSONStudents();
 };
 
-function prepareObjects(jsonData) {
-  // creating a new array, populated with return value of the createStudentObject function
+function prepareObjects(jsonData) {  // creating a new array, populated with return value of the createStudentObject function
   allStudents = jsonData.map(createStudentObject);
-  //   console.log(jsonData);
-  //   console.log(allStudents);
-  // console.table(allStudents) 
   displayList(allStudents);
 };
 
@@ -95,7 +90,7 @@ function prepareObjectsBloodStatus(jsonData) {
   families.half = jsonData.half;
 };
 
-function createStudentObject(jsonStudent) {
+function createStudentObject(jsonStudent) { //creating the Student object
   //   console.log(jsonStudent);
   const student = Object.create(Student);
   student.fullName = jsonStudent.fullname.trim();
@@ -111,7 +106,7 @@ function createStudentObject(jsonStudent) {
 
 
 
-
+  // setting the blood-ststus for each student
   for (let i = 0; i < families.half.length; i++) {
     if (families.half[i] == student.lastName) {
       student.bloodStatus = "Half";
@@ -132,7 +127,7 @@ function createStudentObject(jsonStudent) {
 }
 
 
-function middleName(fullNParam) {
+function middleName(fullNParam) {  //cleaning the middle names
   let fullNameSplited = fullNParam.split(" ");
   if (fullNameSplited.length > 2 && fullNameSplited[1].charAt(0) !== `"`
   ) {
@@ -141,7 +136,7 @@ function middleName(fullNParam) {
   return ("");
 };
 
-function nickName(fullNParam) {
+function nickName(fullNParam) {  // cleaning the nickname
   let fullNameSplited = fullNParam.split(" ");
   if (fullNameSplited.length > 2 && fullNameSplited[1].charAt(0) === `"`
   ) {
@@ -151,13 +146,13 @@ function nickName(fullNParam) {
 };
 
 
-function capitalize(name) {
+function capitalize(name) {  // capitalizing first character of the name
   return (name.charAt(0).toUpperCase() + name.substring(1).toLowerCase());
 };
 
 
 function displayList(value) {
-  // clear the display
+  // clear the display 
   document.querySelector("#list tbody").innerHTML = "";
   // build a new list
   value.forEach(displayStudent);
@@ -176,7 +171,7 @@ function displayStudent(student) {
   clone.querySelector("[data-field=house]").textContent = student.house;
   clone.querySelector("[data-field=blood]").textContent = student.bloodStatus;
 
-  if (student.inquisitorialSquad == true) {
+  if (student.inquisitorialSquad == true) {  // make the inquisitors visible by puting a "check" mark on.
     clone.querySelector("[data-field=inquisitor]").textContent = "✓";
   }
 
@@ -184,23 +179,20 @@ function displayStudent(student) {
     clone.querySelector("[data-field=prefect]").textContent = "✓";
   }
   addModalListner(student, clone);
-
   // console.log(clone);
-
   // append clone to list
   document.querySelector("tbody").appendChild(clone);
-
 };
 
 
-function addSortEvent() {
+function addSortEvent() {   //adding the eventsListeners for the sorting
   const sortBtns = document.querySelectorAll("[data-action=sort]");
-  currentStudentsList = allStudents;
+  currentStudentsList = allStudents;    // making a current list of the sorted students
   for (let i = 0; i < sortBtns.length; i++) {
     sortBtns[i].addEventListener("click", function () {
       sortStudents(this.dataset.sort, currentStudentsList, this.dataset.sortDirection);
 
-      if (this.dataset.sortDirection === "asc") {
+      if (this.dataset.sortDirection === "asc") {   // changing the descending/ascending dataset value
         this.dataset.sortDirection = "desc"
       }
       else {
@@ -210,50 +202,35 @@ function addSortEvent() {
   }
 };
 
-function sortStudents(value, allStudentsParam, sortDirection) {
+function sortStudents(value, allStudentsParam, sortDirection) {   //sorting the students list 
 
 
-  function sortByValueAsc(a, b) {
+  function sortByValueAsc(a, b) {   //ascendent sorting algorithm
     if (a[value] < b[value]) {
       return -1;
     } else {
       return 1;
-    }
-  }
+    };
+  };
 
-  function sortByValueDesc(a, b) {
+  function sortByValueDesc(a, b) {    //descendent sorting algorithm
     if (a[value] < b[value]) {
       return 1;
     } else {
       return -1;
-    }
-  }
+    };
+  };
 
   if (sortDirection === "asc") {
-    currentStudentsList = allStudentsParam.sort(sortByValueAsc);
+    currentStudentsList = allStudentsParam.sort(sortByValueAsc);    //sorting ascendent (A-Z)
   }
   else if (sortDirection === "desc") {
-    currentStudentsList = allStudentsParam.sort(sortByValueDesc);
+    currentStudentsList = allStudentsParam.sort(sortByValueDesc);//sorting descendent (Z-A)
   }
 
-  displayList(currentStudentsList);
+  displayList(currentStudentsList);   //displayng the current sorted students list
 
-  console.log(allStudentsParam)
-  //  revers asc/desc var 1
-  // let reverse = 1;
-  // if (sortDirection == "asc") {
-  //   reverse = 1;
-  // } else if (sortDirection == "desc"){
-  //   reverse = -1;
-  // }
-  // function sortByValue(a, b) {
-  //   if (a[value] < b[value]) {
-  //     return -1 * reverse;
-  //   } else {
-  //     return 1 * reverse;
-  //   }
-  // }
-
+  // console.log(allStudentsParam)
 };
 
 function addFilterEvents() {
@@ -302,7 +279,9 @@ function showModal(student) {
   document.querySelector("[data-field=modalHouse]").textContent = student.house;
   document.querySelector("[data-field=modalBloodStatus]").textContent = student.bloodStatus;
   document.getElementById("modalStudentImage").src = "/images/" + student.imageFileName;
-  console.log(student.imageFileName);
+  document.getElementById("modalHouseLogo").src = "/houseLogos/" + student.house + "Logo.png";
+
+
   addEventListenerModalButtons(student);
 
   if (student.prefect == true) {
@@ -323,8 +302,19 @@ function showModal(student) {
     const expellBtn = document.querySelector("#expellBtn");
     const expellBtnClone = expellBtn.cloneNode(true);
     expellBtn.parentNode.replaceChild(expellBtnClone, expellBtn);
-  }
+  };
+
+  // if (student.house == "Slytherin") {
+  //   document.querySelector(".modal-content").classList.add("slytherin");
+  //   console.log(student.house)
+  // }
+
+  document.querySelector(".modal-content").classList.add(student.house.toLowerCase());
+  console.log(student.house)
+
 };
+
+
 
 
 function addModalCloseEventListener() {
@@ -335,19 +325,22 @@ function addModalCloseEventListener() {
     if (event.target == modal) {
       modal.classList.add("hide");
       removeBtnEvents(modal);
+      document.querySelector(".modal-content").className = "modal-content";
+
     }
   })
 
   closeModal.addEventListener("click", function () {
     modal.classList.add("hide");
     removeBtnEvents(modal);
-
+    document.querySelector(".modal-content").className = "modal-content";
   })
 
 };
 
 function closeModal() {
   document.getElementById("studentModal").classList.add("hide");
+  document.querySelector(".modal-content").className = "modal-content";
   removeBtnEvents(document.getElementById("studentModal"));
 };
 
@@ -397,7 +390,7 @@ function makeInquisitor(student) {
     student.inquisitorialSquad = true;
   }
   else {
-    alert("In order to make a student Inquisitor, he/she must be Pure-Blooded and from Slytherin house.")
+    alert("In order to make a student Inquisitor, he/she must be in Slytherin house and Pure-Blooded.")
   };
 };
 
